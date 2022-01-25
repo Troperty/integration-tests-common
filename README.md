@@ -15,6 +15,10 @@ Add to your package.json:
   }
 }
 ```
+...and run
+```
+npm install
+```
 
 Use in your test specification:
 ```
