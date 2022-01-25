@@ -28,3 +28,10 @@ describe('Trot', () => {
     .
     .
 ```
+
+## Updates
+Whenever this project is updated via a git push, run:
+```
+npm install https://github.com/Troperty/integration-tests-common
+````
+...in order to pull the latest version. We could create tags later on if we really want, but for now latest and greatest if enough.
