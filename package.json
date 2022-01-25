@@ -1,0 +1,5 @@
+{
+  "name": "integration-tests-common",
+  "version": "1.0.0",
+  "description": "Common help functionality for use with testing frameworks such as Cypress"
+}

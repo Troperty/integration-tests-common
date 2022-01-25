@@ -1,0 +1,14 @@
+{
+    "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+    "content-type": "application/json",
+    "expires": "0",
+    "pragma": "no-cache",
+    "set-cookie": [
+        "Path=/; Secure; HttpOnly"
+    ],
+    "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+    "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-xss-protection": "1; mode=block"
+}
