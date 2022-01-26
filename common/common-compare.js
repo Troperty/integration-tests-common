@@ -7,14 +7,14 @@
 import relevantHeaders from '../fixtures/relevant-headers.json'
 
 // Convenience method for HTTP GET
-export function getAndCompareCanonical(url, expectedBodyFixtureFileName, failOnStatusCode = true, expectedHeaders = relevantHeaders) {
-    const request = { method: 'GET', url: url, failOnStatusCode: failOnStatusCode }
+export function getAndCompareCanonical(url, expectedBodyFixtureFileName, failOnStatusCode = true, expectedHeaders = relevantHeaders, auth = { bearer: Cypress.env('token1') }) {
+    const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
     callAndCompareCanonical(request, expectedBodyFixtureFileName, expectedHeaders)
 }
 
 // Convenience method for HTTP POST
-export function postAndCompareCanonical(url, postBody, expectedBodyFixtureFileName, failOnStatusCode = true, expectedHeaders = relevantHeaders) {
-    const request = { method: 'POST', url: url, body: postBody, failOnStatusCode: failOnStatusCode }
+export function postAndCompareCanonical(url, postBody, expectedBodyFixtureFileName, failOnStatusCode = true, expectedHeaders = relevantHeaders, auth = { bearer: Cypress.env('token1') }) {
+    const request = { method: 'POST', url: url, body: postBody, auth: auth, failOnStatusCode: failOnStatusCode }
     callAndCompareCanonical(request, expectedBodyFixtureFileName, expectedHeaders)
 }
 
