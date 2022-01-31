@@ -1,0 +1,18 @@
+{
+    "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+    "content-encoding": "gzip",
+    "content-length": "392",
+    "content-type": "application/json;charset=UTF-8",
+    "date": "Wed, 22 Dec 2021 11:10:15 GMT",
+    "expires": "0",
+    "pragma": "no-cache",
+    "set-cookie": [
+        "correlationId=c4e0defd-be90-4d11-a36a-c42ab4e852a7; Path=/; Secure; HttpOnly"
+    ],
+    "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+    "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-xss-protection": "1; mode=block",
+    "transfer-encoding": "chunked"
+}
