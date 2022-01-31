@@ -5,9 +5,9 @@
     "version": "0.2.0",
     "configurations": [ {
         // Run all
-        // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run",
+        "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run",
         // Run individual
-        "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare.spec.js",
+        // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare.spec.js",
          "name": "Run cypress",
             "request": "launch",
             "type": "node-terminal"

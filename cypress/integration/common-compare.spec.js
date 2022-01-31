@@ -5,7 +5,19 @@ const _ = chaiMatchPattern.getLodashModule()
 import { commonHeaderPattern } from "../../fixtures/common-header-pattern.js"
 import { getAndMatch } from "../../common/common-compare-with-patterns"
 
+import allHeaders from '../fixtures/all-headers.json'
+import strippedHeaders from '../fixtures/stripped-headers.json'
+import { ignoreKeysAndCookies } from "../../common/common-compare"
+
 describe('Examples for writing tests using common helper functions', () => {
+
+     it('Helper function for ignoring keys and cookies in array should work', () => {
+        const actual = JSON.stringify(allHeaders, ignoreKeysAndCookies(['date', 'content-length', 'content-type', 'content-encoding', 'transfer-encoding'], ['correlationId']))
+        const expected = JSON.stringify(strippedHeaders)
+        // Compare JSON as strings and ignoring the complication that json keys sometimes appear in
+        // different order (we do use the canonical JSON technique in the actual enpoint tests)
+        expect(actual, 'Keys or cookies differ!!!').to.equal(expected)
+    })
 
     it('Verify headers using pattern', () => {
         cy.fixture('all-headers.json').then(allHeaders => {
