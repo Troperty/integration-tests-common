@@ -8,7 +8,8 @@
         "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run",
         // Run individual
         // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare.spec.js",
-         "name": "Run cypress",
+        // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare-with-patterns.spec.js",
+        "name": "Run cypress",
             "request": "launch",
             "type": "node-terminal"
         }

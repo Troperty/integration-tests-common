@@ -1,0 +1,52 @@
+[
+    {
+        "code": "Bi",
+        "id": "4",
+        "name": "Billund Trav"
+    },
+    {
+        "code": "Bh",
+        "id": "9",
+        "name": "Bornholms Trav"
+    },
+    {
+        "code": "Ch",
+        "id": "1",
+        "name": "Charlottenlund Trav"
+    },
+    {
+        "code": "Od",
+        "id": "5",
+        "name": "Fyens Væddeløbsbane"
+    },
+    {
+        "code": "År",
+        "id": "2",
+        "name": "Jydsk Væddeløbsbane"
+    },
+    {
+        "code": "Kl",
+        "id": "11",
+        "name": "Klampenborg Galop"
+    },
+    {
+        "code": "Ny",
+        "id": "8",
+        "name": "Nykøbing F. Travbane"
+    },
+    {
+        "code": "Ål",
+        "id": "7",
+        "name": "Racing Arena Ålborg"
+    },
+    {
+        "code": "Sk",
+        "id": "6",
+        "name": "Skive Trav"
+    },
+    {
+        "code": "Bs",
+        "id": "3",
+        "name": "Skovbo Travbane"
+    }
+]

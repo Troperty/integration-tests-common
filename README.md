@@ -1,7 +1,7 @@
 # PUBLIC REPO!!!
 # integration-tests-common
 
-Holds commonly used test functions for comparing JSON canonically etc.
+Holds commonly used test functions for comparing JSON canonically etc. Check the tests under /cypress/integration/XYZ.spec.js for some example code on how to use the commun helper functions.
 
 ## Usage
 Add to your package.json:

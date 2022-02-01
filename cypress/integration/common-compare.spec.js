@@ -2,12 +2,14 @@ const chaiMatchPattern = require('chai-match-pattern')
 const { expect } = require("chai").use(chaiMatchPattern)
 const _ = chaiMatchPattern.getLodashModule()
 
+import relevantHeaders from '../../fixtures/relevant-headers.json'
+
 import { commonHeaderPattern } from "../../fixtures/common-header-pattern.js"
-import { getAndMatch } from "../../common/common-compare-with-patterns"
 
 import allHeaders from '../fixtures/all-headers.json'
 import strippedHeaders from '../fixtures/stripped-headers.json'
 import { ignoreKeysAndCookies } from "../../common/common-compare"
+import { getAndCompareCanonical } from "../../common/common-compare"
 
 describe('Examples for writing tests using common helper functions', () => {
 
@@ -25,41 +27,10 @@ describe('Examples for writing tests using common helper functions', () => {
         })
     })
 
-    it('Verify body using explicit hardcoded JSON pattern', () => {
-        getAndMatch("https://ci.api.svenskgalopp.se/webapi/tracks?licenseTracks=true",
-        [
-            {
-              "id": "229",
-              "code": "BP",
-              "name": "Bro Park"
-            },
-            {
-              "id": "1400",
-              "code": "GG",
-              "name": "Göteborg Galopp"
-            },
-            {
-              "id": "221",
-              "code": "JÄ",
-              "name": "Jägersro Galopp"
-            }
-        ],
-          commonHeaderPattern,
-          null // No auth
-        )
-    })
-
-    it.only('Verify elements in body JSON array using custom JSON pattern', () => {
-        cy.request("https://ci.api.svenskgalopp.se/webapi/tracks?licenseTracks=true").then(actualResponse => {
-            expect(actualResponse.headers).to.matchPattern(commonHeaderPattern)
-            actualResponse.body.every(t => expect(t).to.matchPattern(
-                {
-                    "id": (id) => _.isString(id) && !isNaN(id),
-                    "code": _.isString,
-                    "name": _.isString
-                }
-            ))
-        })
+    it('Tracks: Get All Tracks', () => {
+        // Note that the first two parameters are usually enough as the default parameters are
+        // set to match the more common scenario where we call with auth (and not null as we do here) 
+        getAndCompareCanonical('https://qa.api.danskhv.dk/webapi/trot/tracks', 'tracks.json', false, relevantHeaders, null)
     })
 
 })
