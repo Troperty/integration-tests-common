@@ -16,7 +16,7 @@ export const commonHeaderPattern = {
     "x-content-type-options": "nosniff",
     "x-xss-protection": "1; mode=block",
     "x-frame-options": "DENY",
-    "content-length": _.isString,
+    "content-length": cl => _.isOmitted(cl) || _.isString(cl),
     "content-encoding": (ce) => _.isOmitted(ce) || ce === "gzip",
     "transfer-encoding": (te) => _.isOmitted(te) || te === "chunked"
 }
