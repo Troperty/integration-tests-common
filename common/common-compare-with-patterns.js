@@ -4,7 +4,6 @@ const _ = chaiMatchPattern.getLodashModule()
 
 import { commonHeaderPattern } from "../fixtures/common-header-pattern.js"
 
-// Convenience method for HTTP GET
 export function getAndMatchWithOptions(url, bodyPattern,
     { // Optional parameters passed in an (unnamed) destructured last parameter
         headerPattern = commonHeaderPattern,
@@ -15,20 +14,19 @@ export function getAndMatchWithOptions(url, bodyPattern,
     callAndMatch(request, bodyPattern, headerPattern)
 }
 
-// Convenience method for HTTP GET
 export function getAndMatchArrayWithOptions(url, bodyPattern,
     { // Optional parameters passed in an (unnamed) destructured last parameter
         subpath = null, 
         headerPattern = commonHeaderPattern, 
         auth = { bearer: Cypress.env('token1') }, 
-        failOnStatusCode = true
+        failOnStatusCode = true,
+        allowEmpty = false
     } = {}) {
     const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
-    callAndMatchArray(request, bodyPattern, headerPattern, subpath)
+    callAndMatchArray(request, bodyPattern, headerPattern, subpath, allowEmpty)
 }
 
-// Convenience method for HTTP POST
-export function postAndMatchWithOptions(url, postBody, bodyPattern, 
+ export function postAndMatchWithOptions(url, postBody, bodyPattern, 
     { // Optional parameters passed in an (unnamed) destructured last parameter
         headerPattern = commonHeaderPattern,
         auth = { bearer: Cypress.env('token1') },
@@ -38,38 +36,53 @@ export function postAndMatchWithOptions(url, postBody, bodyPattern,
     callAndMatch(request, bodyPattern, headerPattern)
 }
 
-// Convenience method for HTTP POST
-export function postAndMatchArrayWithOptions(url, postBody, bodyPattern,
+ export function postAndMatchArrayWithOptions(url, postBody, bodyPattern,
     { // Optional parameters passed in an (unnamed) destructured last parameter
         subpath = null, 
         headerPattern = commonHeaderPattern, 
         auth = { bearer: Cypress.env('token1') }, 
-        failOnStatusCode = true
+        failOnStatusCode = true,
+        allowEmpty = false
     } = {}) {
     const request = { method: 'POST', url: url, body: postBody, auth: auth, failOnStatusCode: failOnStatusCode }
-    callAndMatchArray(request, bodyPattern, headerPattern, subpath)
+    callAndMatchArray(request, bodyPattern, headerPattern, subpath, allowEmpty)
 }
 
-// Convenience method for HTTP GET
+/**
+ * Convenience method for HTTP GET
+ * @deprecated Use getAndMatchWithOptions with optional last parameter object instead:
+ * getAndMatchWithOptions(url, bodyPattern, {failOnStatusCode = false})
+ */
 export function getAndMatch(url, bodyPattern, headerPattern = commonHeaderPattern, auth = { bearer: Cypress.env('token1') }, failOnStatusCode = true) {
     const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
     callAndMatch(request, bodyPattern, headerPattern)
 }
 
-// Convenience method for HTTP GET
-export function getAndMatchArray(url, bodyPattern, subpath = null, headerPattern = commonHeaderPattern, auth = { bearer: Cypress.env('token1') }, failOnStatusCode = true) {
+/**
+ * Convenience method for HTTP GET
+ * @deprecated Use getAndMatchArrayWithOptions with optional last parameter object instead:
+ * getAndMatchArrayWithOptions(url, bodyPattern, {subpath = "a.b.c", failOnStatusCode = false})
+ */export function getAndMatchArray(url, bodyPattern, subpath = null, headerPattern = commonHeaderPattern, auth = { bearer: Cypress.env('token1') }, failOnStatusCode = true) {
     const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
     callAndMatchArray(request, bodyPattern, headerPattern, subpath)
 }
 
-// Convenience method for HTTP POST
-export function postAndMatch(url, postBody, bodyPattern, headerPattern = commonHeaderPattern, auth = { bearer: Cypress.env('token1') }, failOnStatusCode = true) {
+/**
+ * Convenience method for HTTP POST
+ * @deprecated Use postAndMatchWithOptions with optional last parameter object instead:
+ * postAndMatchWithOptions(url, postBody, bodyPattern, {failOnStatusCode = false})
+ */
+ export function postAndMatch(url, postBody, bodyPattern, headerPattern = commonHeaderPattern, auth = { bearer: Cypress.env('token1') }, failOnStatusCode = true) {
     const request = { method: 'POST', url: url, body: postBody, auth: auth, failOnStatusCode: failOnStatusCode }
     callAndMatch(request, bodyPattern, headerPattern)
 }
 
-// Convenience method for HTTP POST
-export function postAndMatchArray(url, postBody, bodyPattern, subpath = null, headerPattern = commonHeaderPattern, auth = { bearer: Cypress.env('token1') }, failOnStatusCode = true) {
+/**
+ * Convenience method for HTTP POST
+ * @deprecated Use postAndMatchArrayWithOptions with optional last parameter object instead:
+ * postAndMatchArrayWithOptions(url, postBody, bodyPattern, {subpath = "a.b.c", failOnStatusCode = false})
+ */
+ export function postAndMatchArray(url, postBody, bodyPattern, subpath = null, headerPattern = commonHeaderPattern, auth = { bearer: Cypress.env('token1') }, failOnStatusCode = true) {
     const request = { method: 'POST', url: url, body: postBody, auth: auth, failOnStatusCode: failOnStatusCode }
     callAndMatchArray(request, bodyPattern, headerPattern, subpath)
 }
@@ -83,11 +96,7 @@ export function postAndMatchArray(url, postBody, bodyPattern, subpath = null, he
 export function callAndMatch(request, bodyPattern, headerPattern = commonHeaderPattern, subpath = null) {
     cy.request(request).then(actualResponse => {
         expect(actualResponse.headers).to.matchPattern(headerPattern)
-        if (subpath != null) {
-            expect(_.get(actualResponse.body, subpath)).to.matchPattern(bodyPattern)
-        } else {
-            expect(actualResponse.body).to.matchPattern(bodyPattern)
-        }
+        getOrRoot(actualResponse.body, subpath).every(e => expect(e).to.matchPattern(bodyPattern))
     })
 }
 
@@ -95,15 +104,18 @@ export function callAndMatch(request, bodyPattern, headerPattern = commonHeaderP
 // If subpath is used then the response's body is (deep) navigated down to the given subpath.
 // Example: getAndMatchArray(`${e.actualHost}/schools`, schoolPattern, "_embedded.schoolResources")
 // ...will expect that the array under the body's _embedded.schoolResources key should match the given school pattern
-export function callAndMatchArray(request, bodyPattern, headerPattern = commonHeaderPattern, subpath = null) {
+export function callAndMatchArray(request, bodyPattern, headerPattern = commonHeaderPattern, subpath = null, allowEmpty = true) {
     cy.request(request).then(actualResponse => {
         expect(actualResponse.headers).to.matchPattern(headerPattern)
-        if (subpath != null) {
-            _.get(actualResponse.body, subpath).every(e => expect(e).to.matchPattern(bodyPattern))
-        } else {
-            actualResponse.body.every(e => expect(e).to.matchPattern(bodyPattern))
-        }
+
+        const jsonArray = getOrRoot(actualResponse.body, subpath)
+        if (!allowEmpty) expect(jsonArray).to.not.be.empty
+        jsonArray.every(e => expect(e).to.matchPattern(bodyPattern))
     })
+}
+
+function getOrRoot(o, subpath) {
+    return subpath != null ? _.get(o, subpath) : o
 }
 
 
