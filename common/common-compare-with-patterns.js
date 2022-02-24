@@ -4,17 +4,17 @@ const _ = chaiMatchPattern.getLodashModule()
 
 import { commonHeaderPattern } from "../fixtures/common-header-pattern.js"
 
-export function getAndMatchWithOptions(url, bodyPattern,
+export function getAndMatchWithOptions(url, pattern,
     { // Optional parameters passed in an (unnamed) destructured last parameter
         headerPattern = commonHeaderPattern,
         auth = { bearer: Cypress.env('token1') },
         failOnStatusCode = true
     } = {}) {
     const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
-    callAndMatch(request, bodyPattern, headerPattern)
+    callAndMatch(request, pattern, headerPattern)
 }
 
-export function getAndMatchArrayWithOptions(url, bodyPattern,
+export function getAndMatchArrayWithOptions(url, elementPattern,
     { // Optional parameters passed in an (unnamed) destructured last parameter
         subpath = null, 
         headerPattern = commonHeaderPattern, 
@@ -23,20 +23,20 @@ export function getAndMatchArrayWithOptions(url, bodyPattern,
         allowEmpty = false
     } = {}) {
     const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
-    callAndMatchArray(request, bodyPattern, headerPattern, subpath, allowEmpty)
+    callAndMatchArray(request, elementPattern, headerPattern, subpath, allowEmpty)
 }
 
- export function postAndMatchWithOptions(url, postBody, bodyPattern, 
+ export function postAndMatchWithOptions(url, postBody, pattern, 
     { // Optional parameters passed in an (unnamed) destructured last parameter
         headerPattern = commonHeaderPattern,
         auth = { bearer: Cypress.env('token1') },
         failOnStatusCode = true
     } = {}) {
     const request = { method: 'POST', url: url, body: postBody, auth: auth, failOnStatusCode: failOnStatusCode }
-    callAndMatch(request, bodyPattern, headerPattern)
+    callAndMatch(request, pattern, headerPattern)
 }
 
- export function postAndMatchArrayWithOptions(url, postBody, bodyPattern,
+ export function postAndMatchArrayWithOptions(url, postBody, elementPattern,
     { // Optional parameters passed in an (unnamed) destructured last parameter
         subpath = null, 
         headerPattern = commonHeaderPattern, 
@@ -45,7 +45,7 @@ export function getAndMatchArrayWithOptions(url, bodyPattern,
         allowEmpty = false
     } = {}) {
     const request = { method: 'POST', url: url, body: postBody, auth: auth, failOnStatusCode: failOnStatusCode }
-    callAndMatchArray(request, bodyPattern, headerPattern, subpath, allowEmpty)
+    callAndMatchArray(request, elementPattern, headerPattern, subpath, allowEmpty)
 }
 
 /**
@@ -93,10 +93,10 @@ export function getAndMatch(url, bodyPattern, headerPattern = commonHeaderPatter
 // If subpath is used then the response's body is (deep) navigated down to the given subpath.
 // Example: getAndMatch(`${e.actualHost}/school/123`, addressPattern, "address")
 // ...will expect that the object under the school body's address key should match the given address pattern
-export function callAndMatch(request, bodyPattern, headerPattern = commonHeaderPattern, subpath = null) {
+export function callAndMatch(request, pattern, headerPattern = commonHeaderPattern, subpath = null) {
     cy.request(request).then(actualResponse => {
         expect(actualResponse.headers).to.matchPattern(headerPattern)
-        getOrRoot(actualResponse.body, subpath).every(e => expect(e).to.matchPattern(bodyPattern))
+        getOrRoot(actualResponse.body, subpath).every(e => expect(e).to.matchPattern(pattern))
     })
 }
 
@@ -104,13 +104,13 @@ export function callAndMatch(request, bodyPattern, headerPattern = commonHeaderP
 // If subpath is used then the response's body is (deep) navigated down to the given subpath.
 // Example: getAndMatchArray(`${e.actualHost}/schools`, schoolPattern, "_embedded.schoolResources")
 // ...will expect that the array under the body's _embedded.schoolResources key should match the given school pattern
-export function callAndMatchArray(request, bodyPattern, headerPattern = commonHeaderPattern, subpath = null, allowEmpty = true) {
+export function callAndMatchArray(request, elementPattern, headerPattern = commonHeaderPattern, subpath = null, allowEmpty = true) {
     cy.request(request).then(actualResponse => {
         expect(actualResponse.headers).to.matchPattern(headerPattern)
 
         const jsonArray = getOrRoot(actualResponse.body, subpath)
         if (!allowEmpty) expect(jsonArray).to.not.be.empty
-        jsonArray.every(e => expect(e).to.matchPattern(bodyPattern))
+        jsonArray.every(e => expect(e).to.matchPattern(elementPattern))
     })
 }
 
