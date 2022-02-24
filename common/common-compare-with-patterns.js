@@ -96,7 +96,8 @@ export function getAndMatch(url, bodyPattern, headerPattern = commonHeaderPatter
 export function callAndMatch(request, pattern, headerPattern = commonHeaderPattern, subpath = null) {
     cy.request(request).then(actualResponse => {
         expect(actualResponse.headers).to.matchPattern(headerPattern)
-        getOrRoot(actualResponse.body, subpath).every(e => expect(e).to.matchPattern(pattern))
+        const json = getOrRoot(actualResponse.body, subpath)
+        expect(json).to.matchPattern(pattern)
     })
 }
 
