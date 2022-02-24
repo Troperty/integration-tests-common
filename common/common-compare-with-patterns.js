@@ -5,6 +5,52 @@ const _ = chaiMatchPattern.getLodashModule()
 import { commonHeaderPattern } from "../fixtures/common-header-pattern.js"
 
 // Convenience method for HTTP GET
+export function getAndMatchWithOptions(url, bodyPattern,
+    { // Optional parameters passed in an (unnamed) destructured last parameter
+        headerPattern = commonHeaderPattern,
+        auth = { bearer: Cypress.env('token1') },
+        failOnStatusCode = true
+    } = {}) {
+    const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
+    callAndMatch(request, bodyPattern, headerPattern)
+}
+
+// Convenience method for HTTP GET
+export function getAndMatchArrayWithOptions(url, bodyPattern,
+    { // Optional parameters passed in an (unnamed) destructured last parameter
+        subpath = null, 
+        headerPattern = commonHeaderPattern, 
+        auth = { bearer: Cypress.env('token1') }, 
+        failOnStatusCode = true
+    } = {}) {
+    const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
+    callAndMatchArray(request, bodyPattern, headerPattern, subpath)
+}
+
+// Convenience method for HTTP POST
+export function postAndMatchWithOptions(url, postBody, bodyPattern, 
+    { // Optional parameters passed in an (unnamed) destructured last parameter
+        headerPattern = commonHeaderPattern,
+        auth = { bearer: Cypress.env('token1') },
+        failOnStatusCode = true
+    } = {}) {
+    const request = { method: 'POST', url: url, body: postBody, auth: auth, failOnStatusCode: failOnStatusCode }
+    callAndMatch(request, bodyPattern, headerPattern)
+}
+
+// Convenience method for HTTP POST
+export function postAndMatchArrayWithOptions(url, postBody, bodyPattern,
+    { // Optional parameters passed in an (unnamed) destructured last parameter
+        subpath = null, 
+        headerPattern = commonHeaderPattern, 
+        auth = { bearer: Cypress.env('token1') }, 
+        failOnStatusCode = true
+    } = {}) {
+    const request = { method: 'POST', url: url, body: postBody, auth: auth, failOnStatusCode: failOnStatusCode }
+    callAndMatchArray(request, bodyPattern, headerPattern, subpath)
+}
+
+// Convenience method for HTTP GET
 export function getAndMatch(url, bodyPattern, headerPattern = commonHeaderPattern, auth = { bearer: Cypress.env('token1') }, failOnStatusCode = true) {
     const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
     callAndMatch(request, bodyPattern, headerPattern)
