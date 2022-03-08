@@ -11,6 +11,11 @@ import strippedHeaders from '../fixtures/stripped-headers.json'
 import { ignoreKeysAndCookies } from "../../common/common-compare"
 import { getAndCompareCanonical } from "../../common/common-compare"
 
+let e
+before(() => {
+    e = Cypress.env()
+})
+
 describe('Examples for writing tests using common helper functions', () => {
 
      it('Helper function for ignoring keys and cookies in array should work', () => {
@@ -27,10 +32,14 @@ describe('Examples for writing tests using common helper functions', () => {
         })
     })
 
-    it('Tracks: Get All Tracks', () => {
+    it.only('Tracks: Get All Tracks using compare canonical', () => {
         // Note that the first two parameters are usually enough as the default parameters are
         // set to match the more common scenario where we call with auth (and not null as we do here) 
         getAndCompareCanonical('https://qa.api.danskhv.dk/webapi/trot/tracks', 'tracks.json', false, relevantHeaders, null)
+    })
+
+    it.only('Reads env varables', () => {
+        console.log("Env variable compareHeaders: " + e.compareHeaders)
     })
 
 })

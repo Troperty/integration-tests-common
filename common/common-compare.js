@@ -6,6 +6,8 @@
 
 import relevantHeaders from '../fixtures/relevant-headers.json'
 
+const e = Cypress.env()
+
 // Convenience method for HTTP GET
 export function getAndCompareCanonical(url, expectedBodyFixtureFileName, failOnStatusCode = true, expectedHeaders = relevantHeaders, auth = { bearer: Cypress.env('token1') }) {
     const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
@@ -35,7 +37,7 @@ export function compareCanonical(response1, response2,
     headerReplacer = ignoreKeysAndCookies(['date', 'content-length', 'transfer-encoding', 'content-type', 'content-encoding'], ['correlationId']),
     responseReplacer = replaceHrefWithPathOnly()
 ) {
-    compareHeadersCanonical(response1.headers, response2.headers, headerReplacer)
+    if (e.compareHeaders) { compareHeadersCanonical(response1.headers, response2.headers, headerReplacer) }
     compareBodiesCanonical(response1.body, response2.body, responseReplacer)
 }
 

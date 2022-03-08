@@ -4,6 +4,8 @@ const _ = chaiMatchPattern.getLodashModule()
 
 import { commonHeaderPattern } from "../fixtures/common-header-pattern.js"
 
+const e = Cypress.env()
+
 export function getAndMatchWithOptions(url, pattern,
     { // Optional parameters passed in an (unnamed) destructured last parameter
         headerPattern = commonHeaderPattern,
@@ -95,7 +97,7 @@ export function getAndMatch(url, bodyPattern, headerPattern = commonHeaderPatter
 // ...will expect that the object under the school body's address key should match the given address pattern
 export function callAndMatch(request, pattern, headerPattern = commonHeaderPattern, subpath = null) {
     cy.request(request).then(actualResponse => {
-        expect(actualResponse.headers).to.matchPattern(headerPattern)
+        if (e.compareHeaders) { expect(actualResponse.headers).to.matchPattern(headerPattern) }
         const json = getOrRoot(actualResponse.body, subpath)
         expect(json).to.matchPattern(pattern)
     })
@@ -107,7 +109,7 @@ export function callAndMatch(request, pattern, headerPattern = commonHeaderPatte
 // ...will expect that the array under the body's _embedded.schoolResources key should match the given school pattern
 export function callAndMatchArray(request, elementPattern, headerPattern = commonHeaderPattern, subpath = null, allowEmpty = true) {
     cy.request(request).then(actualResponse => {
-        expect(actualResponse.headers).to.matchPattern(headerPattern)
+        if (e.compareHeaders) { expect(actualResponse.headers).to.matchPattern(headerPattern) }
 
         const jsonArray = getOrRoot(actualResponse.body, subpath)
         if (!allowEmpty) expect(jsonArray).to.not.be.empty
