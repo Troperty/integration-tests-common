@@ -1,7 +1,7 @@
 # PUBLIC REPO!!!
 # integration-tests-common
 
-Holds commonly used test functions for comparing JSON canonically etc. Check the tests under /cypress/integration/XYZ.spec.js for some example code on how to use the common helper functions.
+Holds commonly used test functions for comparing JSON canonically etc. Check the tests under /cypress/integration/XYZ.spec.js for some example code on how to use the common helper functions. Many more examples (live code) can be found in the actual integration test repos, such as: webapi-sg-integration-tests.
 
 ## Usage
 Add to your package.json:
