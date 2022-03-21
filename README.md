@@ -62,5 +62,51 @@ describe('Trot', () => {
 Whenever this project is updated via a git push, run:
 ```
 npm install https://github.com/Troperty/integration-tests-common
-````
-...in order to pull the latest version. We could create tags later on if we really want, but for now latest and greatest if enough.
+```
+...in order to pull the latest version. We could create tags later on if we really want, but for now latest and greatest is enough.
+
+
+# Code Coverage Report
+A poor man's code coverage report node script can be found under cypress/support/generate-coco-report.js.
+It is not intended to solve the whole problem of code coverage with branching if statements etc as that would require some instrumentation/agent installed on the server. The CoCo report simply takes Swagger endpoints that we intend to cover with tests as a parameter (via a cfg file) and compares those endpoints with what was actually called during the spec runs. In order to generate the spec run request log (to have some truth to compare with) the cypress run must export the request log to disk.
+## 1. Export request log to disk
+```
+DEBUG=cypress:server:socket-base npx cypress run 2> cypress/logs/request.log
+```
+Meaning:
+```
+DEBUG=cypress:server:socket-base
+```
+...will generate verbose logging of outgoing requests to **stderr**.
+```
+2> cypress/logs/request.log
+```
+...will send **stderr** to file.
+
+## 2. Generate report from request log
+```
+COCO_REPORT_CONFIG_FILE=coco-report-config.json node -e 'require(\"./cypress/support/generate-coco-report.js\").generateCoCoReport()
+```
+There might be better ways to call a node script, but this is what we're currently doing...
+The report cfg file holds information on which Swagger metadata endpoints to query for endpoints to check for coverage, example cfg for SE Gallop:
+
+```
+// coco-report-config.json
+{
+  "servicesUnderTest": [
+    "/docs/breedings",
+    "/docs/charts",
+    "/docs/horses",
+    "/docs/licenseholders",
+    "/docs/ownership-transfers",
+    "/docs/propositions",
+    "/docs/raceinfo",
+    "/docs/sportactors",
+    "/docs/tds",
+    "/docs/tracks",
+    "/docs/user"
+  ],
+  "host": "https://ci.api.svenskgalopp.se/webapi"
+}
+```
+
