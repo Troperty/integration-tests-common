@@ -85,7 +85,7 @@ DEBUG=cypress:server:socket-base
 
 ## 2. Generate report from request log
 ```
-COCO_REPORT_CONFIG_FILE=coco-report-config.json node -e 'require(\"./cypress/support/generate-coco-report.js\").generateCoCoReport()
+COCO_REPORT_CONFIG_FILE=coco-report-config.json node -e 'require(\"./node_modules/integration-tests-common/cypress/support/generate-coco-report.js\").generateCoCoReport()
 ```
 There might be better ways to call a node script, but this is what we're currently doing...
 The report cfg file holds information on which Swagger metadata endpoints to query for endpoints to check for coverage, example cfg for SE Gallop:
