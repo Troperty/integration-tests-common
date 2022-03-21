@@ -2,7 +2,7 @@
   "name": "integration-tests-common",
   "version": "1.0.0",
   "description": "Common help functionality for use with testing frameworks such as Cypress",
-  "devDependencies": {
+  "dependencies": {
     "chai": "^4.3.6",
     "chai-match-pattern": "^1.2.0",
     "cypress": "9.0.0",
