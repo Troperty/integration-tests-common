@@ -14,7 +14,7 @@ exports.generateCoCoReport = function () {
     // console.log("\nEndpoints called during spec runs:\n" + JSON.stringify(calledEndpoints))
 
     const reportData = createReportData(targetedEndpoints, calledEndpoints)
-    const table = createAsciiTable(reportData)
+    const table = createAsciiTable(reportData, cfg)
 
     fs.writeFileSync("cypress/reports/ascii.txt", table.toString())
     console.log(table.toString())
@@ -75,22 +75,14 @@ function extractEndpointsCalledDuringSpecRuns() {
     return calledEndpoints;
 }
 
-function createAsciiTable(reportData) {
-    // var table = new Table({
-    //     head: ['Called', 'Method', "Path"],
-    //     colWidths: [8, 8, 150]
-    // })
-
-    // reportData.forEach(e => table.push([e.called ? '✅' : '❌', e.method, e.path]))
-    // return table
-    
+function createAsciiTable(reportData, cfg) {    
     const { AsciiTable3, AlignmentEnum } = require('ascii-table3')
 
     const data = []
     reportData.forEach(e => data.push([e.called ? "\u2713" : '', e.method, e.path]))
 
     const table =
-        new AsciiTable3('Code Coverage Report')
+        new AsciiTable3('Code Coverage Report - ' + cfg.host)
             .setHeading('Called', 'Method', "Path")
             .addRowMatrix(data);
 
