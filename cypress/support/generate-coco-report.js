@@ -2,6 +2,7 @@ const { match } = require("node-match-path")
 const fs = require("fs")
 const fetch = require('sync-fetch')
 const RJSON = require("relaxed-json")
+const _ = require('lodash')
 
 exports.generateCoCoReport = function () {
     const cfg = JSON.parse(fs.readFileSync(process.env.COCO_REPORT_CONFIG_FILE))
@@ -46,7 +47,9 @@ function extractTargetedEndpointsFromSwagger(cfg) {
         }
     })
 
-    return targetedEndpoints
+    // Since we sometimes have overlapping tags in Swagger, we do this just to not get duplicate paths
+    const uniqueTargetedEndpoints = _.uniqWith(targetedEndpoints, _.isEqual)
+    return uniqueTargetedEndpoints
 }
 
 function extractEndpointsCalledDuringSpecRuns() {
