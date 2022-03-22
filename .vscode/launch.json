@@ -4,11 +4,14 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [ {
-        // Run all
-        "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run",
+        // Run all (except the swagger endpoint extractor)
+        "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config ignoreTestFiles=${workspaceFolder}/cypress/integration/extract-targeted-endpoints.spec.js",
         // Run individual
         // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare.spec.js",
         // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare-with-patterns.spec.js",
+        
+        // This is meant to be run from each sub project
+        // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/extract-targeted-endpoints.spec.js",
         "name": "Run cypress",
             "request": "launch",
             "type": "node-terminal"
