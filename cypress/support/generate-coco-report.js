@@ -105,5 +105,5 @@ function hasBeenCalled(endpoint, calledEndpoints) {
 
 function convertPathParams(path) {
     // Spring Boot vs nodejs style on path params: /raceinfo/{raceDayId}/results => /raceinfo/:raceDayId/results
-    return path.replace("{", ":").replace("}", "")
+    return path.replaceAll("{", ":").replaceAll("}", "")
 }
