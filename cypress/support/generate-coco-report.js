@@ -5,8 +5,9 @@ const RJSON = require("relaxed-json")
 const _ = require('lodash')
 
 exports.generateCoCoReport = function () {
-    const cfg = JSON.parse(fs.readFileSync(process.env.COCO_REPORT_CONFIG_FILE))
-    console.log("Using CoCo cfg:\n" + JSON.stringify(cfg))
+    const cfgFileName = process.env.COCO_REPORT_CONFIG_FILE ? process.env.COCO_REPORT_CONFIG_FILE : "cypress.json"
+    const cfg = JSON.parse(fs.readFileSync(cfgFileName))
+    console.log("Using cfg:\n" + JSON.stringify(cfg))
 
     const targetedEndpoints = extractTargetedEndpointsFromSwagger(cfg)
     // console.log("\nTargeted endpoints from Swagger:\n" + JSON.stringify(targetedEndpoints))
@@ -30,12 +31,14 @@ function createReportData(targetedEndpoints, calledEndpoints) {
 }
 
 // FIXME Can this be resolved somehow at runtime? Is there a top level endpoint in Swagger we can expose that just lists the others?
-function extractTargetedEndpointsFromSwagger(cfg) {
+exports.extractTargetedEndpointsFromSwagger = function(cfg) {
     const targetedEndpoints = []
+    const ctxRoot = new URL(cfg.env.actualHost).pathname
+    // Read the scraped paths from file, strip first part
+    const metadataPaths = fs.readFileSync("cypress/logs/swagger-metadata-paths.json").map(path => path.split("/").slice(1).join("/"))
 
-    const ctxRoot = new URL(cfg.host).pathname
-    cfg.servicesUnderTest.forEach(s => {
-        const swaggerUrl = `${cfg.host}${s}`
+    metadataPaths.forEach(s => {
+        const swaggerUrl = `${cfg.env.actualHost}${s}`
         const swaggerMetadataJson = fetch(swaggerUrl, { /* empty options */ }).json()
 
         for (const [path, value] of Object.entries(swaggerMetadataJson.paths)) {
@@ -85,7 +88,7 @@ function createAsciiTable(reportData, cfg) {
     reportData.forEach(e => data.push([e.called ? "\u2713" : '', e.method, e.path]))
 
     const table =
-        new AsciiTable3('Code Coverage Report - ' + cfg.host)
+        new AsciiTable3('Code Coverage Report - ' + cfg.env.actualHost)
             .setHeading('Called', 'Method', "Path")
             .addRowMatrix(data);
 
