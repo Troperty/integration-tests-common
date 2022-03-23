@@ -73,7 +73,7 @@ It is not intended to solve the whole problem of code coverage with branching if
 ```
 DEBUG=cypress:server:socket-base npx cypress run 2> cypress/logs/request.log
 ```
-Meaning:
+Explanation:
 ```
 DEBUG=cypress:server:socket-base
 ```
@@ -85,28 +85,10 @@ DEBUG=cypress:server:socket-base
 
 ## 2. Generate report from request log
 ```
-COCO_REPORT_CONFIG_FILE=coco-report-config.json node -e 'require(\"./node_modules/integration-tests-common/cypress/support/generate-coco-report.js\").generateCoCoReport()
+node -e 'require(\"./node_modules/integration-tests-common/cypress/support/generate-coco-report.js\").generateCoCoReport()'
 ```
-There might be better ways to call a node script, but this is what we're currently doing...
-The report cfg file holds information on which Swagger metadata endpoints to query for endpoints to check for coverage, example cfg for SE Gallop:
-
+There might be better ways to call a node script, but this is what we're currently doing... The report generator function accepts two optional parameters (currently only needed for customer-api where we have a non-default Swagger docs url) that can be passed in an options object like so: 
 ```
-// coco-report-config.json
-{
-  "servicesUnderTest": [
-    "/docs/breedings",
-    "/docs/charts",
-    "/docs/horses",
-    "/docs/licenseholders",
-    "/docs/ownership-transfers",
-    "/docs/propositions",
-    "/docs/raceinfo",
-    "/docs/sportactors",
-    "/docs/tds",
-    "/docs/tracks",
-    "/docs/user"
-  ],
-  "host": "https://ci.api.svenskgalopp.se/webapi"
-}
+node -e 'require(\"./node_modules/integration-tests-common/cypress/support/generate-coco-report.js\").generateCoCoReport({baseUrl: \"https://ci.api.travsport.se/customerapi\", docsUrl: \"https://ci.api.travsport.se/customerapi/internaldocs\"})'
 ```
 
