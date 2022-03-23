@@ -50,14 +50,21 @@ const extractTargetedEndpointsFromSwagger = async function (metadataPaths, hostA
 
     metadataPaths.forEach(s => {
         const swaggerUrl = `${hostAndCtxRoot}/${s}`
-        const swaggerMetadataJson = fetch(swaggerUrl, { /* empty options */ }).json()
+        const response = fetch(swaggerUrl, { /* empty options */ })
 
-        for (const [path, value] of Object.entries(swaggerMetadataJson.paths)) {
-            // One of GET, POST, PUT etc...
-            const httpVerb = Object.entries(value)[0][0].toUpperCase()
-            const nodeStylePath = convertPathParams(path)
-            // path is the last part of the url from (typically what comes after <protocol>://<host>:<port>/webapi/)
-            targetedEndpoints.push({ method: httpVerb, path: new URL(hostAndCtxRoot).pathname + nodeStylePath })
+        if (response.status === 404) {
+            console.log(`${swaggerUrl} returned 404, skipping url and continuing with the rest...`)
+        } else if (response.status !== 200) {
+            console.log(`${swaggerUrl} returned ${response.status}, ABORTING endpoint extraction...`)
+        } else { 
+            const swaggerMetadataJson = response.json()
+            for (const [path, value] of Object.entries(swaggerMetadataJson.paths)) {
+                // One of GET, POST, PUT etc...
+                const httpVerb = Object.entries(value)[0][0].toUpperCase()
+                const nodeStylePath = convertPathParams(path)
+                // path is the last part of the url from (typically what comes after <protocol>://<host>:<port>/webapi/)
+                targetedEndpoints.push({ method: httpVerb, path: new URL(hostAndCtxRoot).pathname + nodeStylePath })
+            }
         }
     })
 
