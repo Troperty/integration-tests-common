@@ -1,6 +1,7 @@
 {
   "video": false,
   "env": {
-    "compareHeaders": true
+    "compareHeaders": true,
+    "actualHost": "https://ci.api.danskhv.dk/webapi"
   }
 }

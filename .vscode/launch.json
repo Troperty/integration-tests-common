@@ -4,14 +4,15 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [ {
-        // Run all (except the swagger endpoint extractor)
-        // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config ignoreTestFiles=${workspaceFolder}/cypress/integration/extract-targeted-endpoints.spec.js",
+        // Run all
+        "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run",
         // Run individual
         // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare.spec.js",
         // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare-with-patterns.spec.js",
         
-        // This is meant to be run from each sub project
-        // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/scrape-targeted-endpoints.spec.js",
+        // Report scripts are meant to be run from each sub project, but this gives us a way to test them here while coding
+        // "command": "cd ${workspaceFolder} && node -e 'require(\"./cypress/support/generate-coco-report.js\").generateCoCoReport()'",
+        // "command": "cd ${workspaceFolder} && node -e 'require(\"./cypress/support/generate-coco-report.js\").generateCoCoReport({docsUrl: \"https://ci.api.danskhv.dk/webapi/docs\"})'",
         "name": "Run cypress",
             "request": "launch",
             "type": "node-terminal"
