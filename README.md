@@ -84,6 +84,7 @@ DEBUG=cypress:server:socket-base
 ...will send **stderr** to file.
 
 ## 2. Generate report from request log
+**NOTE: nodejs version must be at least v16.13.1**, o/w the report generation script will fail on string.replaceAll() not found
 ```
 node -e 'require(\"./node_modules/integration-tests-common/cypress/support/generate-coco-report.js\").generateCoCoReport()'
 ```
