@@ -41,7 +41,7 @@ function createReportData(targetedEndpoints, calledEndpoints) {
     return targetedEndpoints.map(e => ({
         called: hasBeenCalled(e, calledEndpoints),
         method: e.method,
-        path: e.path
+        path: e.swaggerStylePath
     }))
 }
 
@@ -63,7 +63,7 @@ const extractTargetedEndpointsFromSwagger = async function (metadataPaths, hostA
                 const httpVerb = Object.entries(value)[0][0].toUpperCase()
                 const nodeStylePath = convertPathParams(path)
                 // path is the last part of the url from (typically what comes after <protocol>://<host>:<port>/webapi/)
-                targetedEndpoints.push({ method: httpVerb, path: new URL(hostAndCtxRoot).pathname + nodeStylePath })
+                targetedEndpoints.push({ method: httpVerb, path: new URL(hostAndCtxRoot).pathname + nodeStylePath, swaggerStylePath: path })
             }
         }
     })
