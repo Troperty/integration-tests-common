@@ -117,6 +117,18 @@ export function callAndMatchArray(request, elementPattern, headerPattern = commo
     })
 }
 
+export function expectNonEmptyArrayWithElementsMatching(pattern) {
+    return elements => expect(elements).to.be.not.empty && elements.every(element =>
+        expect(element).to.matchPattern(pattern)
+    )
+}
+
+export function expectArrayWithElementsMatching(pattern) {
+    return elements => elements.every(element =>
+        expect(element).to.matchPattern(pattern)
+    )
+}
+
 function getOrRoot(o, subpath) {
     return subpath != null ? _.get(o, subpath) : o
 }
