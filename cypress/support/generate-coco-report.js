@@ -11,22 +11,31 @@ exports.generateCoCoReport = async function ({
     baseUrl = defaultBaseUrl(),
     docsUrl = defaultDocsUrl()
 } = {}) {
-    
+
     console.log("Using baseUrl: " + baseUrl + " and docsUrl: " + docsUrl)
 
     const metadataPaths = await scrapeSwaggerDocsMetadata(docsUrl)
 
     const targetedEndpoints = await extractTargetedEndpointsFromSwagger(metadataPaths, baseUrl)
-    // console.log("\nTargeted endpoints from Swagger:\n" + JSON.stringify(targetedEndpoints))
+    const noTargeted = targetedEndpoints.length
+    const noTargetedGets = targetedEndpoints.filter(e => e.method === "GET").length
 
     const calledEndpoints = extractEndpointsCalledDuringSpecRuns()
-    // console.log("\nEndpoints called during spec runs:\n" + JSON.stringify(calledEndpoints))
+    const noCalled = calledEndpoints.length
 
     const reportData = createReportData(targetedEndpoints, calledEndpoints)
     const table = createAsciiTable(reportData, baseUrl)
 
-    fs.writeFileSync("cypress/reports/ascii.txt", table.toString())
-    console.log(table.toString())
+    const tableString = table.toString()
+    const metrics =
+`
+Targeted endpoints: ${noTargeted}, Targeted GET endpoints: ${noTargetedGets}, Endpoints actually called during tests: ${noCalled}
+Coverage total: ${(noCalled/noTargeted*100).toFixed(1)}%, Coverage total GET: ${(noCalled/noTargetedGets*100).toFixed(1)}%
+`
+    const report = metrics + tableString
+
+    fs.writeFileSync("cypress/reports/ascii.txt", report)
+    console.log(report)
 }
 
 function defaultBaseUrl() {
@@ -56,7 +65,7 @@ const extractTargetedEndpointsFromSwagger = async function (metadataPaths, hostA
             console.log(`${swaggerUrl} returned 404, skipping url and continuing with the rest...`)
         } else if (response.status !== 200) {
             console.log(`${swaggerUrl} returned ${response.status}, ABORTING endpoint extraction...`)
-        } else { 
+        } else {
             const swaggerMetadataJson = response.json()
             for (const [path, value] of Object.entries(swaggerMetadataJson.paths)) {
                 // One of GET, POST, PUT etc...
