@@ -20,17 +20,22 @@ exports.generateCoCoReport = async function ({
     const noTargeted = targetedEndpoints.length
     const noTargetedGets = targetedEndpoints.filter(e => e.method === "GET").length
 
+    // NOTE: These include other endpoints too, not only requests to test target urls
     const calledEndpoints = extractEndpointsCalledDuringSpecRuns()
-    const noCalled = calledEndpoints.length
 
     const reportData = createReportData(targetedEndpoints, calledEndpoints)
+    // All targeted that were actually called
+    const called = reportData.filter(row => row.called === true)
+    // All targeted GET that were actually called
+    const calledGets = called.filter(row => row.method === "GET")
+
     const table = createAsciiTable(reportData, baseUrl)
 
     const tableString = table.toString()
     const metrics =
 `Targeted endpoints: ${noTargeted}, Targeted GET endpoints: ${noTargetedGets}
-Endpoints actually called during tests: ${noCalled}
-Coverage total: ${(noCalled/noTargeted*100).toFixed(1)}%, Coverage total GET: ${(noCalled/noTargetedGets*100).toFixed(1)}%`
+Endpoints actually called during tests: ${called.length}
+Coverage total: ${(called.length/noTargeted*100).toFixed(1)}%, Coverage total GET: ${(calledGets.length/noTargetedGets*100).toFixed(1)}%`
     const report = metrics + "\n" + tableString
 
     fs.writeFileSync("cypress/reports/ascii.txt", report)
