@@ -31,7 +31,7 @@ exports.generateCoCoReport = async function ({
 `Targeted endpoints: ${noTargeted}, Targeted GET endpoints: ${noTargetedGets}
 Endpoints actually called during tests: ${noCalled}
 Coverage total: ${(noCalled/noTargeted*100).toFixed(1)}%, Coverage total GET: ${(noCalled/noTargetedGets*100).toFixed(1)}%`
-    const report = metrics + tableString
+    const report = metrics + "\n" + tableString
 
     fs.writeFileSync("cypress/reports/ascii.txt", report)
     console.log(report)
