@@ -99,6 +99,9 @@ export function callAndMatch(request, pattern, headerPattern = commonHeaderPatte
     cy.request(request).then(actualResponse => {
         if (e.compareHeaders) { expect(actualResponse.headers).to.matchPattern(headerPattern) }
         const json = getOrRoot(actualResponse.body, subpath)
+        if (Array.isArray(json)) {
+            throw "Response JSON is an array, expected object!"
+        }
         expect(json).to.matchPattern(pattern)
     })
 }
@@ -112,6 +115,9 @@ export function callAndMatchArray(request, elementPattern, headerPattern = commo
         if (e.compareHeaders) { expect(actualResponse.headers).to.matchPattern(headerPattern) }
 
         const jsonArray = getOrRoot(actualResponse.body, subpath)
+        if (!Array.isArray(jsonArray)) {
+            throw "Response JSON is an object, expected array!"
+        }
         if (!allowEmpty) expect(jsonArray).to.not.be.empty
         jsonArray.every(e => expect(e).to.matchPattern(elementPattern))
     })

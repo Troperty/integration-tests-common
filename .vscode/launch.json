@@ -8,10 +8,10 @@
         // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run",
         // Run individual
         // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare.spec.js",
-        // "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare-with-patterns.spec.js",
+        "command": "cd ${workspaceFolder} && DEBUG=cypress:server:browsers:electron npx cypress run --config testFiles=${workspaceFolder}/cypress/integration/common-compare-with-patterns.spec.js",
         
         // Report scripts are meant to be run from each sub project, but this gives us a way to test them here while coding
-        "command": "cd ${workspaceFolder} && node -e 'require(\"./cypress/support/generate-coco-report.js\").generateCoCoReport()'",
+        // "command": "cd ${workspaceFolder} && node -e 'require(\"./cypress/support/generate-coco-report.js\").generateCoCoReport()'",
         // "command": "cd ${workspaceFolder} && node -e 'require(\"./cypress/support/generate-coco-report.js\").generateCoCoReport({docsUrl: \"https://ci.api.danskhv.dk/webapi/docs\"})'",
         "name": "Run cypress",
             "request": "launch",
