@@ -6,7 +6,7 @@
     "ascii-table3": "^0.7.3",
     "chai": "^4.3.6",
     "chai-match-pattern": "^1.2.0",
-    "cypress": "9.0.0",
+    "cypress": "9.5.4",
     "node-match-path": "^0.6.3",
     "puppeteer": "^13.5.1",
     "relaxed-json": "^1.0.3",
