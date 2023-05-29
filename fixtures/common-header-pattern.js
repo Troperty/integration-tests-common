@@ -12,7 +12,7 @@ export const commonHeaderPattern = {
         return cStr.includes("Path=/; Secure; HttpOnly") && cStr.includes("correlationId=")
     }],
     "strict-transport-security": "max-age=31536000 ; includeSubDomains",
-    "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
     "x-content-type-options": "nosniff",
     "x-xss-protection": "1; mode=block",
     "x-frame-options": "DENY",
