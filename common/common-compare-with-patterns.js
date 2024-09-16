@@ -25,7 +25,7 @@ export function getAndMatchArrayWithOptions(url, elementPattern,
         allowEmpty = false
     } = {}) {
     const request = { method: 'GET', url: url, auth: auth, failOnStatusCode: failOnStatusCode }
-    callAndMatchArray(request, elementPattern, headerPattern, subpath, allowEmpty)
+    return callAndMatchArray(request, elementPattern, headerPattern, subpath, allowEmpty)
 }
 
  export function postAndMatchWithOptions(url, postBody, pattern, 
