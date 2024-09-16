@@ -111,7 +111,7 @@ export function callAndMatch(request, pattern, headerPattern = commonHeaderPatte
 // Example: getAndMatchArray(`${e.actualHost}/schools`, schoolPattern, "_embedded.schoolResources")
 // ...will expect that the array under the body's _embedded.schoolResources key should match the given school pattern
 export function callAndMatchArray(request, elementPattern, headerPattern = commonHeaderPattern, subpath = null, allowEmpty = true) {
-    cy.request(request).then(actualResponse => {
+    return cy.request(request).then(actualResponse => {
         if (e.compareHeaders) { expect(actualResponse.headers).to.matchPattern(headerPattern) }
 
         const jsonArray = getOrRoot(actualResponse.body, subpath)
