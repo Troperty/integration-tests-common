@@ -13,7 +13,7 @@ export const localHeaderPattern ={
     }],
     "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
     "x-content-type-options": "nosniff",
-    "x-xss-protection": "1; mode=block",
+    "x-xss-protection": "0",
     "x-frame-options": "DENY",
     "content-length": cl => _.isOmitted(cl) || _.isString(cl),
     "content-encoding": (ce) => _.isOmitted(ce) || ce === "gzip",
