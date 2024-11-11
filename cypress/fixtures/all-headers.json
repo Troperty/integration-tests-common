@@ -13,6 +13,6 @@
     "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
     "x-content-type-options": "nosniff",
     "x-frame-options": "DENY",
-    "x-xss-protection": "1; mode=block",
+    "x-xss-protection": "0",
     "transfer-encoding": "chunked"
 }
