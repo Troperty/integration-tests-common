@@ -8,9 +8,14 @@ export const commonHeaderPattern = {
     "date": (date) => _.isOmitted(date) || _.isDateString(date),
     "expires": _.isString,
     "pragma": "no-cache",
-    "set-cookie": [(cStr) => {
-        return cStr.includes("Path=/; Secure; HttpOnly") && cStr.includes("correlationId=")
-    }],
+    "set-cookie": (cookies) => {
+        // Accept 1 or 2 cookies during gcp-logging upgrade rollout (SCPMA-578/SCPMA-580)
+        if (!Array.isArray(cookies)) return false;
+        if (cookies.length < 1 || cookies.length > 2) return false;
+        return cookies.every(cStr =>
+            cStr.includes("Path=/; Secure; HttpOnly") && cStr.includes("correlationId=")
+        );
+    },
     "strict-transport-security": "max-age=31536000 ; includeSubDomains",
     "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
     "x-content-type-options": "nosniff",
