@@ -94,7 +94,7 @@ const scrapeSwaggerDocsMetadata = async function (swaggerDocsUrl) {
     const page = await browser.newPage()
     await page.goto(swaggerDocsUrl)
 
-    const options = await page.$x("//select/option")
+    const options = await page.$$("xpath///select/option")
     // Extract the values of the swagger doc dropdown (holds the paths to each respective service Swagger doc page)
     const optionTexts = await Promise.all(options.map(async (option) =>
         await page.evaluate(el => el.value.split("/").slice(2).join("/"), option)
