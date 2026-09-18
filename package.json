@@ -10,6 +10,6 @@
     "node-match-path": "^0.6.3",
     "puppeteer": "^25.7.0",
     "relaxed-json": "^1.0.3",
-    "sync-fetch": "^0.6.0"
+    "sync-fetch": "^0.7.1"
   }
 }
